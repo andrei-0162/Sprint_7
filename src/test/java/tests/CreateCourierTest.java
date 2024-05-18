@@ -1,7 +1,6 @@
 package tests;
 
 import io.qameta.allure.Description;
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -9,11 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import resources.CreateCourier;
 import resources.DeleteCourier;
-import resources.Parameters;
+import resources.constants.TotalConstants;
+import resources.constants.CreateDeleteCourierConstants;
 
 import java.util.Random;
 
-//DONE
+
 public class CreateCourierTest {
 
     public  int random4Numbers () {
@@ -21,7 +21,7 @@ public class CreateCourierTest {
     }
     @Before
     public void setUp() {
-        RestAssured.baseURI = Parameters.BASE_URL;
+        RestAssured.baseURI = TotalConstants.BASE_URL;
     }
 
     @Test
@@ -31,14 +31,14 @@ public class CreateCourierTest {
     //запрос возвращает правильный код ответа
     //успешный запрос возвращает ok: true
     public void createCourier(){
-        String login = Parameters.DEFAULT_LOGIN + random4Numbers();
-        String password = Parameters.DEFAULT_PASSWORD;
-        String name = Parameters.DEFAULT_NAME;
+        String login = TotalConstants.DEFAULT_LOGIN + random4Numbers();
+        String password = TotalConstants.DEFAULT_PASSWORD;
+        String name = TotalConstants.DEFAULT_NAME;
 
         CreateCourier newCreateCourier = new CreateCourier(login, password, name);
         Response response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_201);
-        newCreateCourier.checkBodyMessage(response, Parameters.BODY_KEY_NAME_FOR_CODE_201, Parameters.BODY_MESSAGE_FOR_CODE_201);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_201);
+        newCreateCourier.checkBodyMessage(response, CreateDeleteCourierConstants.BODY_KEY_NAME_FOR_CODE_201, CreateDeleteCourierConstants.BODY_MESSAGE_FOR_CODE_201);
 
         //Удаление курьера
         new DeleteCourier().deleteCourier(newCreateCourier);
@@ -51,15 +51,15 @@ public class CreateCourierTest {
     //запрос возвращает правильный код ответа;
     //если создать пользователя с логином, который уже есть, возвращается ошибка.
     public void tryToCreateCourierTwice(){
-        String login = Parameters.DEFAULT_LOGIN + random4Numbers();
-        String password = Parameters.DEFAULT_PASSWORD;
-        String name = Parameters.DEFAULT_NAME;
+        String login = TotalConstants.DEFAULT_LOGIN + random4Numbers();
+        String password = TotalConstants.DEFAULT_PASSWORD;
+        String name = TotalConstants.DEFAULT_NAME;
 
         CreateCourier newCreateCourier = new CreateCourier(login, password, name);
         newCreateCourier.createCourierPOST(newCreateCourier);
         Response response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_409);
-        newCreateCourier.checkBodyMessage(response, Parameters.BODY_KEY_NAME_FOR_CODE_409, Parameters.BODY_MESSAGE_FOR_CODE_409);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_409);
+        newCreateCourier.checkBodyMessage(response, CreateDeleteCourierConstants.BODY_KEY_NAME_FOR_CODE_409, CreateDeleteCourierConstants.BODY_MESSAGE_FOR_CODE_409);
 
         //Удаление курьера
         new DeleteCourier().deleteCourier(newCreateCourier);
@@ -73,27 +73,27 @@ public class CreateCourierTest {
     //если одного из полей нет, запрос возвращает ошибку;
     public void tryToCreateInvalidCourier(){
 
-        String login = Parameters.DEFAULT_LOGIN + random4Numbers();
-        String password = Parameters.DEFAULT_PASSWORD;
-        String name = Parameters.DEFAULT_NAME;
+        String login = TotalConstants.DEFAULT_LOGIN + random4Numbers();
+        String password = TotalConstants.DEFAULT_PASSWORD;
+        String name = TotalConstants.DEFAULT_NAME;
 
         // (без логина)
-        CreateCourier newCreateCourier = new CreateCourier(Parameters.NULL_VALUE, password, name);
+        CreateCourier newCreateCourier = new CreateCourier(TotalConstants.NULL_VALUE, password, name);
         Response response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_400);
-        newCreateCourier.checkBodyMessage(response, Parameters.BODY_KEY_NAME_FOR_CODE_400, Parameters.BODY_MESSAGE_FOR_CODE_400);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_400);
+        newCreateCourier.checkBodyMessage(response, CreateDeleteCourierConstants.BODY_KEY_NAME_FOR_CODE_400, CreateDeleteCourierConstants.BODY_MESSAGE_FOR_CODE_400);
 
         // (без пароля)
-        newCreateCourier = new CreateCourier(login, Parameters.NULL_VALUE, name);
+        newCreateCourier = new CreateCourier(login, TotalConstants.NULL_VALUE, name);
         response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_400);
-        newCreateCourier.checkBodyMessage(response, Parameters.BODY_KEY_NAME_FOR_CODE_400, Parameters.BODY_MESSAGE_FOR_CODE_400);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_400);
+        newCreateCourier.checkBodyMessage(response, CreateDeleteCourierConstants.BODY_KEY_NAME_FOR_CODE_400, CreateDeleteCourierConstants.BODY_MESSAGE_FOR_CODE_400);
 
         // (без имени)
-        newCreateCourier = new CreateCourier(login, password, Parameters.NULL_VALUE);
+        newCreateCourier = new CreateCourier(login, password, TotalConstants.NULL_VALUE);
         response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_201);
-        newCreateCourier.checkBodyMessage(response, Parameters.BODY_KEY_NAME_FOR_CODE_201, Parameters.BODY_MESSAGE_FOR_CODE_201);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_201);
+        newCreateCourier.checkBodyMessage(response, CreateDeleteCourierConstants.BODY_KEY_NAME_FOR_CODE_201, CreateDeleteCourierConstants.BODY_MESSAGE_FOR_CODE_201);
 
         //Удаление курьера
         new DeleteCourier().deleteCourier(newCreateCourier);

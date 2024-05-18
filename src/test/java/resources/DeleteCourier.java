@@ -2,7 +2,7 @@ package resources;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
-import org.junit.Assert;
+import resources.constants.CreateDeleteCourierConstants;
 
 import static io.restassured.RestAssured.given;
 
@@ -22,7 +22,7 @@ public class DeleteCourier {
                 .header("Content-type", "application/json")
                 .and()
                 .when()
-                .delete(Parameters.DELETE_COURIER_ENDPOINT + id);
+                .delete(CreateDeleteCourierConstants.DELETE_COURIER_ENDPOINT + id);
 
     }
 
@@ -34,7 +34,7 @@ public class DeleteCourier {
 
         LoginCourier newLogin = new LoginCourier(login, password);
         Response loginResponse = newLogin.loginOfCourierPOST(newLogin);
-        LoginCourierDeserealization loggedCourier = loginResponse.as(LoginCourierDeserealization.class);
+        LoginCourierDeserialization loggedCourier = loginResponse.as(LoginCourierDeserialization.class);
         //Удаление курьера
         deleteCourier(loggedCourier.getId());
     }

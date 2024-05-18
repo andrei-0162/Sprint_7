@@ -8,10 +8,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import resources.*;
+import resources.constants.CreateDeleteCourierConstants;
+import resources.constants.LoginConstants;
+import resources.constants.TotalConstants;
 
 import java.util.Random;
 
-//DONE
 
 public class LoginTest {
 
@@ -21,7 +23,7 @@ public class LoginTest {
     }
     @Before
     public void setUp() {
-        RestAssured.baseURI = Parameters.BASE_URL;
+        RestAssured.baseURI = TotalConstants.BASE_URL;
     }
 
     @Test
@@ -29,21 +31,21 @@ public class LoginTest {
     @Description("Создания курьера, логин курьера с проверкой статус-кода и тела ответа, удаление курьера")
     //курьер может авторизоваться;
     //успешный запрос возвращает id.
-    public void LoginCourier(){
-        String login = Parameters.DEFAULT_LOGIN + random4Numbers();
-        String password = Parameters.DEFAULT_PASSWORD;
-        String name = Parameters.DEFAULT_NAME;
+    public void loginCourier(){
+        String login = TotalConstants.DEFAULT_LOGIN + random4Numbers();
+        String password = TotalConstants.DEFAULT_PASSWORD;
+        String name = TotalConstants.DEFAULT_NAME;
 
         CreateCourier newCreateCourier = new CreateCourier(login, password, name);
         Response response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_201);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_201);
 
         LoginCourier newLogin = new LoginCourier(login, password);
         Response loginResponse = newLogin.loginOfCourierPOST(newLogin);
-        newLogin.checkStatusOfLoggedInCourier(loginResponse, Parameters.LOGIN_STATUS_CODE_200);
-        newLogin.checkBodyMessage(loginResponse, Parameters.LOGIN_BODY_KEY_NAME_FOR_CODE_200);
+        newLogin.checkStatusOfLoggedInCourier(loginResponse, LoginConstants.LOGIN_STATUS_CODE_200);
+        newLogin.checkBodyMessage(loginResponse, LoginConstants.LOGIN_BODY_KEY_NAME_FOR_CODE_200);
 
-        LoginCourierDeserealization loggedCourier = loginResponse.as(LoginCourierDeserealization.class);
+        LoginCourierDeserialization loggedCourier = loginResponse.as(LoginCourierDeserialization.class);
         Assert.assertNotNull(loggedCourier.getId());
 
         //Удаление курьера
@@ -57,25 +59,25 @@ public class LoginTest {
     //система вернёт ошибку, если неправильно указать логин или пароль;
     //если какого-то поля нет, запрос возвращает ошибку;
     public void tryLoginInvalidCourier(){
-        String login = Parameters.DEFAULT_LOGIN + random4Numbers();
-        String password = Parameters.DEFAULT_PASSWORD;
-        String name = Parameters.DEFAULT_NAME;
+        String login = TotalConstants.DEFAULT_LOGIN + random4Numbers();
+        String password = TotalConstants.DEFAULT_PASSWORD;
+        String name = TotalConstants.DEFAULT_NAME;
 
         CreateCourier newCreateCourier = new CreateCourier(login, password, name);
         Response response = newCreateCourier.createCourierPOST(newCreateCourier);
-        newCreateCourier.checkStatusOfCreatedCourier(response, Parameters.STATUS_CODE_201);
+        newCreateCourier.checkStatusOfCreatedCourier(response, CreateDeleteCourierConstants.STATUS_CODE_201);
 
         //(без логина)
-        LoginCourier newLogin = new LoginCourier(Parameters.EMPTY_VALUE, password);
+        LoginCourier newLogin = new LoginCourier(TotalConstants.EMPTY_VALUE, password);
         Response loginResponse = newLogin.loginOfCourierPOST(newLogin);
-        newLogin.checkStatusOfLoggedInCourier(loginResponse, Parameters.LOGIN_STATUS_CODE_400);
-        newLogin.checkBodyMessage(loginResponse, Parameters.LOGIN_BODY_KEY_NAME_FOR_CODE_400, Parameters.LOGIN_BODY_MESSAGE_FOR_CODE_400);
+        newLogin.checkStatusOfLoggedInCourier(loginResponse, LoginConstants.LOGIN_STATUS_CODE_400);
+        newLogin.checkBodyMessage(loginResponse, LoginConstants.LOGIN_BODY_KEY_NAME_FOR_CODE_400, LoginConstants.LOGIN_BODY_MESSAGE_FOR_CODE_400);
 
         //(без пароля)
-        newLogin = new LoginCourier(login, Parameters.EMPTY_VALUE);
+        newLogin = new LoginCourier(login, TotalConstants.EMPTY_VALUE);
         loginResponse = newLogin.loginOfCourierPOST(newLogin);
-        newLogin.checkStatusOfLoggedInCourier(loginResponse, Parameters.LOGIN_STATUS_CODE_400);
-        newLogin.checkBodyMessage(loginResponse, Parameters.LOGIN_BODY_KEY_NAME_FOR_CODE_400, Parameters.LOGIN_BODY_MESSAGE_FOR_CODE_400);
+        newLogin.checkStatusOfLoggedInCourier(loginResponse, LoginConstants.LOGIN_STATUS_CODE_400);
+        newLogin.checkBodyMessage(loginResponse, LoginConstants.LOGIN_BODY_KEY_NAME_FOR_CODE_400, LoginConstants.LOGIN_BODY_MESSAGE_FOR_CODE_400);
 
         //Удаление курьера
         new DeleteCourier().deleteCourier(newCreateCourier);
@@ -87,13 +89,13 @@ public class LoginTest {
     //система вернёт ошибку, если неправильно указать логин или пароль;
     //если авторизоваться под несуществующим пользователем, запрос возвращает ошибку;
     public void tryLoginNoExistCourier(){
-        String login = Parameters.DEFAULT_LOGIN + random4Numbers();
-        String password = Parameters.DEFAULT_PASSWORD;
+        String login = TotalConstants.DEFAULT_LOGIN + random4Numbers();
+        String password = TotalConstants.DEFAULT_PASSWORD;
 
         LoginCourier newLogin = new LoginCourier(login, password);
         Response loginResponse = newLogin.loginOfCourierPOST(newLogin);
-        newLogin.checkStatusOfLoggedInCourier(loginResponse, Parameters.LOGIN_STATUS_CODE_404);
-        newLogin.checkBodyMessage(loginResponse, Parameters.LOGIN_BODY_KEY_NAME_FOR_CODE_404, Parameters.LOGIN_BODY_MESSAGE_FOR_CODE_404);
+        newLogin.checkStatusOfLoggedInCourier(loginResponse, LoginConstants.LOGIN_STATUS_CODE_404);
+        newLogin.checkBodyMessage(loginResponse, LoginConstants.LOGIN_BODY_KEY_NAME_FOR_CODE_404, LoginConstants.LOGIN_BODY_MESSAGE_FOR_CODE_404);
     }
 
 

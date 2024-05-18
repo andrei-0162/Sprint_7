@@ -2,8 +2,8 @@ package resources;
 
 import io.qameta.allure.Step;
 
-public class LoginCourierDeserealization {
-    public LoginCourierDeserealization() {
+public class LoginCourierDeserialization {
+    public LoginCourierDeserialization() {
     }
 @Step("Поиск и передача id курьера")
     public int getId() {

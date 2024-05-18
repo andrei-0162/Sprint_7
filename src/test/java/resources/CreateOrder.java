@@ -2,6 +2,7 @@ package resources;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import resources.constants.CreateOrderConstants;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
@@ -39,7 +40,7 @@ public class CreateOrder {
                 .and()
                 .body(newCreateOrder)
                 .when()
-                .post(Parameters.CREATE_ORDER_ENDPOINT);
+                .post(CreateOrderConstants.CREATE_ORDER_ENDPOINT);
     }
 
     @Step("Проверка статус кода")

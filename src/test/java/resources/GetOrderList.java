@@ -2,6 +2,7 @@ package resources;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import resources.constants.GetOrderConstants;
 
 import static io.restassured.RestAssured.given;
 
@@ -28,7 +29,14 @@ public class GetOrderList {
                 .header("Content-type", "application/json")
                 .and()
                 .when()
-                .get(Parameters.GET_ORDER_LIST_ENDPOINT);
+                .get(GetOrderConstants.GET_ORDER_LIST_ENDPOINT);
+    }
+
+    @Step("Проверка статус кода")
+    public void checkStatusOfGetOrderList(Response response, int statusCode) {
+        response.then().assertThat()
+                .and()
+                .statusCode(statusCode);
     }
 
 

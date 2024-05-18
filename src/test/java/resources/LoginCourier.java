@@ -2,6 +2,7 @@ package resources;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import resources.constants.LoginConstants;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -42,7 +43,7 @@ public class LoginCourier {
                 .and()
                 .body(newLogin)
                 .when()
-                .post(Parameters.LOGIN_COURIER_ENDPOINT);
+                .post(LoginConstants.LOGIN_COURIER_ENDPOINT);
     }
     @Step("Проверка статус кода")
     public void checkStatusOfLoggedInCourier(Response response, int statusCode) {

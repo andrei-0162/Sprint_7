@@ -2,6 +2,7 @@ package resources;
 
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+import resources.constants.CreateDeleteCourierConstants;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -49,7 +50,7 @@ public class CreateCourier {
                 .and()
                 .body(newCreateCourier)
                 .when()
-                .post(Parameters.CREATE_COURIER_ENDPOINT);
+                .post(CreateDeleteCourierConstants.CREATE_COURIER_ENDPOINT);
     }
 
     @Step("Проверка статуса кода")
